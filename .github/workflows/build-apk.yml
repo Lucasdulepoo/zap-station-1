@@ -24,24 +24,36 @@ jobs:
           channel: stable
           cache: true
 
+      - name: Preparar pasta de logs
+        run: mkdir -p "$RUNNER_TEMP/logs"
+
       - name: Completar o projeto Android (gradle wrapper)
         # Cria só o que falta (ex.: gradle-wrapper.jar); não sobrescreve arquivos existentes.
         run: |
-          flutter create . --platforms=android --org com.zapstation --project-name zap_station
-          rm -f test/widget_test.dart   # teste de exemplo gerado pelo flutter create
-          git status --short
+          set -o pipefail
+          {
+            flutter create . --platforms=android --org com.zapstation --project-name zap_station
+            rm -f test/widget_test.dart   # teste de exemplo gerado pelo flutter create
+            git status --short
+          } 2>&1 | tee "$RUNNER_TEMP/logs/01-create.log"
 
-      - run: flutter --version
-      - run: flutter pub get
+      - name: Versões
+        run: flutter --version
+
+      - name: flutter pub get
+        run: |
+          set -o pipefail
+          flutter pub get 2>&1 | tee "$RUNNER_TEMP/logs/02-pub-get.log"
 
       # O APK é gerado ANTES de analyze/test para você poder instalar mesmo que um teste falhe
       # (o código Dart ainda não tinha sido compilado quando foi escrito).
       - name: Compilar APK (debug)
         run: |
+          set -o pipefail
           flutter build apk --debug \
             --dart-define=SUPABASE_URL=${{ secrets.SUPABASE_URL }} \
             --dart-define=SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }} \
-            --dart-define=APP_ENV=test
+            --dart-define=APP_ENV=test 2>&1 | tee "$RUNNER_TEMP/logs/03-build.log"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -50,10 +62,28 @@ jobs:
           if-no-files-found: error
 
       - name: Analisar
-        run: flutter analyze
+        run: |
+          set -o pipefail
+          flutter analyze 2>&1 | tee "$RUNNER_TEMP/logs/04-analyze.log"
 
       - name: Testes
-        run: flutter test
+        run: |
+          set -o pipefail
+          flutter test 2>&1 | tee "$RUNNER_TEMP/logs/05-test.log"
+
+      # Em caso de falha, publica o final de cada log como "annotation" (visível na página da execução).
+      - name: Resumo do erro
+        if: failure()
+        run: |
+          python3 - <<'EOF'
+          import glob, os, re
+          for path in sorted(glob.glob(os.path.join(os.environ["RUNNER_TEMP"], "logs", "*.log"))):
+              lines = open(path, errors="replace").read().splitlines()
+              key = [l for l in lines if re.search(r"(error|Error|FAILURE|What went wrong|Execution failed|Could not|Exception|\be: |\[E\])", l)]
+              text = "\n".join(key[:50]) + "\n--- final do log ---\n" + "\n".join(lines[-40:])
+              text = text.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+              print("::error title=" + os.path.basename(path) + "::" + text[:3800])
+          EOF
 
   database:
     runs-on: ubuntu-latest
