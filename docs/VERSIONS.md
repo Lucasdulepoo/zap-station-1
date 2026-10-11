@@ -1,7 +1,7 @@
 # Versões
 
-**Nenhuma versão abaixo foi resolvida ou compilada** — o ambiente de desenvolvimento desta fase não alcançava
-pub.dev nem o Maven do Google. São faixas escolhidas por conhecimento prévio; confirme na primeira execução.
+**Status:** `flutter pub get` foi resolvido com sucesso no GitHub Actions (todas as faixas de pacotes abaixo resolveram).
+Gradle/AGP/Kotlin foram ajustados após o primeiro build falhar (o Flutter atual exige Gradle ≥ 8.14); confirme no próximo build.
 
 | Item | Declarado | Onde |
 |---|---|---|
@@ -10,9 +10,9 @@ pub.dev nem o Maven do Google. São faixas escolhidas por conhecimento prévio; 
 | go_router | `^14.6.2` | `pubspec.yaml` |
 | supabase_flutter | `^2.8.0` | `pubspec.yaml` |
 | flutter_lints | `^5.0.0` | `pubspec.yaml` |
-| Android Gradle Plugin | `8.7.3` | `android/settings.gradle.kts` |
-| Kotlin | `2.1.0` | `android/settings.gradle.kts` |
-| Gradle | `8.9` | `android/gradle/wrapper/gradle-wrapper.properties` |
+| Android Gradle Plugin | `8.11.1` | `android/settings.gradle.kts` |
+| Kotlin | `2.2.20` | `android/settings.gradle.kts` |
+| Gradle | `8.14.3` | `android/gradle/wrapper/gradle-wrapper.properties` |
 | minSdk | 24 (Android 7.0) | `android/app/build.gradle.kts` |
 | applicationId | `com.zapstation.app` (disponibilidade na Play Store **não verificada**) | `android/app/build.gradle.kts` |
 

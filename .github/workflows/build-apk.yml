@@ -34,6 +34,7 @@ jobs:
           {
             flutter create . --platforms=android --org com.zapstation --project-name zap_station
             rm -f test/widget_test.dart   # teste de exemplo gerado pelo flutter create
+            rm -rf android/app/src/main/kotlin/com/zapstation/zap_station   # MainActivity duplicada gerada pelo template
             git status --short
           } 2>&1 | tee "$RUNNER_TEMP/logs/01-create.log"
 
