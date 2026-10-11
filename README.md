@@ -16,9 +16,11 @@ Aplicativo Android de mensagens (Flutter + Supabase) com identidade visual próp
 O diretório `android/` traz manifesto, Gradle e ícones, mas **não** o `gradle-wrapper.jar` (binário). Complete uma vez:
 ```bash
 flutter create . --platforms=android --org com.zapstation --project-name zap_station
+rm -f test/widget_test.dart   # teste de exemplo gerado pelo comando; não se aplica a este app
 git status   # confira: o flutter create não deve ter sobrescrito nada seu; reverta se algo foi alterado
 flutter pub get
 ```
+Sem Flutter instalado? Compile o APK na nuvem: [`docs/BUILD_APK.md`](docs/BUILD_APK.md).
 Versões do AGP/Kotlin/Gradle e dos pacotes **não foram resolvidas por build real** — veja [`docs/VERSIONS.md`](docs/VERSIONS.md).
 
 ## Rodar em desenvolvimento
