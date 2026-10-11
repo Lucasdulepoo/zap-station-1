@@ -1,0 +1,39 @@
+name: zap_station
+description: ZAP STATION — aplicativo de mensagens para Android (Flutter + Supabase).
+publish_to: "none"
+# Mantenha em sincronia com kAppVersion em lib/config/app_config.dart (há um teste que confere).
+version: 0.1.0+1
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+
+# ATENÇÃO: as faixas abaixo foram escolhidas a partir de conhecimento prévio e NÃO foram
+# resolvidas com `flutter pub get` (o ambiente de desenvolvimento deste commit não tinha
+# acesso ao pub.dev). Rode `flutter pub get`, ajuste o que o resolvedor reclamar e registre
+# as versões finais em docs/VERSIONS.md (use `flutter pub deps --style=compact`).
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_riverpod: ^2.6.1
+  go_router: ^14.6.2
+  supabase_flutter: ^2.8.0
+
+  # Planejadas para as próximas fases (NÃO adicionadas ainda, para manter cada fase testável):
+  #   Fase 5: image_picker, file_picker, record, just_audio, permission_handler
+  #   Fase 6: firebase_core, firebase_messaging, flutter_local_notifications
+  #   Fase 7: livekit_client, flutter_callkit_incoming (ou equivalente Android)
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/brand/
+
+# Os ícones do launcher são gerados por tools/generate_brand_assets.py (Pillow),
+# sem depender de pacotes Dart.

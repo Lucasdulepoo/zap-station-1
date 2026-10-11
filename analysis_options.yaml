@@ -1,0 +1,16 @@
+include: package:flutter_lints/flutter_lints.yaml
+
+analyzer:
+  language:
+    strict-casts: true
+  exclude:
+    - "build/**"
+    - "**/*.g.dart"
+
+linter:
+  rules:
+    avoid_print: true
+    prefer_const_constructors: true
+    prefer_const_declarations: true
+    unawaited_futures: true
+    use_build_context_synchronously: true

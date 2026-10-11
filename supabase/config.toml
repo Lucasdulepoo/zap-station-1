@@ -1,0 +1,72 @@
+# Configuração do Supabase CLI para desenvolvimento local (`supabase start`).
+# Este arquivo NÃO foi executado neste ambiente (sem Docker/CLI). Os campos seguem o
+# formato do CLI; rode `supabase start` e ajuste o que ele reclamar.
+# Em produção, as mesmas opções são configuradas no painel do projeto (docs/EXTERNAL_SETUP.md).
+
+project_id = "zap-station"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "storage"]
+extra_search_path = ["public", "extensions"]
+max_rows = 200
+
+[db]
+port = 54322
+major_version = 15
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = []
+# Tokens de acesso curtos; refresh token com rotação.
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+refresh_token_reuse_interval = 10
+# Cadastro só por telefone: e-mail e login anônimo desligados.
+enable_signup = true
+enable_anonymous_sign_ins = false
+
+[auth.email]
+enable_signup = false
+enable_confirmations = false
+
+[auth.sms]
+enable_signup = true
+enable_confirmations = true
+# Tempo de vida do código e limite de reenvio (o servidor é a defesa real; o app só reflete).
+max_frequency = "60s"
+template = "Seu codigo ZAP STATION: {{ .Code }}"
+
+# Em desenvolvimento local nenhum SMS real é enviado. Para testar o fluxo sem provedor,
+# use números de teste (NÃO use em produção):
+#   [auth.sms.test_otp]
+#   5511900000001 = "123456"
+#
+# Em produção configure um provedor real (Twilio, MessageBird, Vonage ou TextLocal).
+# Credenciais por variável de ambiente, nunca no arquivo:
+#   [auth.sms.twilio]
+#   enabled = true
+#   account_sid = "env(SUPABASE_AUTH_SMS_TWILIO_ACCOUNT_SID)"
+#   message_service_sid = "env(SUPABASE_AUTH_SMS_TWILIO_MESSAGE_SERVICE_SID)"
+#   auth_token = "env(SUPABASE_AUTH_SMS_TWILIO_AUTH_TOKEN)"
+
+[auth.rate_limit]
+# Por hora, por IP.
+sms_sent = 30
+token_verifications = 60
+
+[realtime]
+enabled = true
+
+[storage]
+enabled = true
+file_size_limit = "100MiB"
+
+[edge_runtime]
+enabled = true
+policy = "per_worker"
+
+[analytics]
+enabled = false
